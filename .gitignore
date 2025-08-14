@@ -4,6 +4,8 @@
 temp_gccflags.c
 **/.consign
 *.root
+AutoDict*.cxx
+AutoDict*.h
 
 # Prerequisites
 *.d
