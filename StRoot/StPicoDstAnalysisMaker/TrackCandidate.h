@@ -1,0 +1,23 @@
+#ifndef TRACKCANDIDATE_H
+#define TRACKCANDIDATE_H
+
+#include "TObject.h"
+
+class  TrackCandidate: public TObject {
+  // Class to represent a track candidate in the analysis
+  // Contains basic properties of a track candidate
+public:
+    int id;          // Unique identifier for the track candidate
+    float pt;       // Transverse momentum of the track candidate
+    float eta;      // Pseudorapidity of the track candidate
+    float phi;      // Azimuthal angle of the track candidate
+    int charge;     // Electric charge of the track candidate
+    TrackCandidate() {}
+    ~TrackCandidate() {}
+
+  ClassDef(TrackCandidate, 1);
+};
+
+
+#endif // TRACKCANDIDATE_H
+
