@@ -20,6 +20,7 @@ void runPicoDstAnalysisMaker(const char* inFileName = "st_physics_20069002_raw_1
   // Load specific libraries
   gSystem->Load("StPicoEvent");
   gSystem->Load("StPicoDstMaker");
+  gSystem->AddDynamicPath(gSystem->ExpandPathName("$PWD/.sl79_gcc485/LIB"));
   gSystem->Load("StPicoDstAnalysisMaker");
 
   // Create new chain

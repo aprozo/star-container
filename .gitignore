@@ -1,3 +1,31 @@
+.vscode/
 .rootrc
 .sl*_gcc*
 temp_gccflags.c
+**/.consign
+*.root
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+*.pcm
+*.d
+*dict.cxx
+*dict.h
+*dictUmbrella.h
+*dictContent.h
+
