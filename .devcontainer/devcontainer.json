@@ -1,23 +1,28 @@
 {
-  "name": "STAR Software",
-  "image": "ghcr.io/star-bnl/star-sw:latest",
-  "features": {
-    "ghcr.io/devcontainers/features/sshd:1": {}
+  "name": "star-shell",
+  "build": {
+    "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "echo 'Skipping VS Code server install'",
-  "remoteUser": "root",
-  "customizations": {
-    "codespaces": {
-      "openFiles": []
-    },
-    "vscode": {
-      "extensions": [],
-      "settings": {
-        "remote.SSH.useLocalServer": false,
-        "remote.SSH.enableAgentForwarding": false
-      }
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": true,
+      "installDockerBuildx": true
     }
   },
-  "forwardPorts": [],
-  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"]
+  "remoteEnv": {
+    "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
+  },
+  "postCreateCommand": "docker pull ghcr.io/star-bnl/star-sw:main-root5-gcc485",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "workspaceFolder": "/workspaces/star-container"
 }

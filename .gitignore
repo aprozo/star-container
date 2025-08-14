@@ -1,0 +1,3 @@
+.rootrc
+.sl*_gcc*
+temp_gccflags.c
