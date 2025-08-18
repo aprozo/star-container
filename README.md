@@ -8,7 +8,7 @@ This is an example analysis of [`StPicoDst`](https://www.star.bnl.gov/webdata/do
 
 It is based on [Grigory's presentation on PicoDst 2019](https://drupal.star.bnl.gov/STAR/system/files/Nigmatkulov_intro2pico_Krakow2019.pdf)
 
-## Instructions to run
+## Introduction
 
 The star-sw version is [here](https://github.com/star-bnl/star-sw), which corresponds to the latest version `star pro` with compiler `gcc4.85` and `ROOT 5.34` version.
 
@@ -18,6 +18,24 @@ The `cons` command will:
 - perform compilation of all your files with `.cxx`(important!) and connected headers `.h` under `StRoot` directory.
 
  
+## Run instructions:
+1. First, you'll need to enter the container, for that, type:
+```bash
+star-shell
+```
+2. To compile a project, perform `cons` command
+```bash
+cons
+```
+3. Now, one can run event analysis macro using
+```bash
+root -l -b macros/runPicoDstAnalysisMaker.C
+```
+It will create a `.root` file with your TTree and some QA histograms
+4. Now, one can perform your analysis on this newly created ttree with compiled (!) macro - notice + at the end
+```bash
+root -l -b macros/readMyTreeEvent.C+
+```
 
 
 
