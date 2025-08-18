@@ -6,8 +6,8 @@
 class MyTreeEvent;
 class TrackCandidate;
 
-#include "MyTreeEvent.h"
-#include "TrackCandidate.h"
+#include "../StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h"
+#include "../StRoot/StPicoDstAnalysisMaker/TrackCandidate.h"
 
 //==============================================================================
 // Class implementations for ROOT dictionary
@@ -22,7 +22,7 @@ ClassImp(TrackCandidate);
 ClassImp(MyTreeEvent);
 
 void readMyTreeEvent(
-    TString filename = "/workspaces/star-container/oPicoAnaMaker_1.root") {
+    TString filename = "/workspaces/star-tutorial/oPicoAnaMaker_1.root") {
 
   TFile *file = TFile::Open(filename, "READ");
   TTree *tree = (TTree *)file->Get("events");

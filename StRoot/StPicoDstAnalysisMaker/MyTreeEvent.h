@@ -9,10 +9,7 @@ class  MyTreeEvent{
 public:
     Int_t centrality, eventId;
     Float_t vertexX, vertexY, vertexZ; // Vertex coordinates
-    
-
     std::vector<TrackCandidate> inclusiveTracks; // Vector of inclusive track candidates
-    std::vector<TrackCandidate> partnerTracks;   // Vector of partner track candidates
     MyTreeEvent() {}
     ~MyTreeEvent() {}
 

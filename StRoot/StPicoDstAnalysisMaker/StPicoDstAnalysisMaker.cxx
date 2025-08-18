@@ -24,8 +24,6 @@
 
 #include "TTree.h"
 
-  //=============================================================
-  //FOR VERONIKA
 #include "TrackCandidate.h"
 #include "MyTreeEvent.h"
 
@@ -168,7 +166,6 @@ Int_t StPicoDstAnalysisMaker::Init() {
 
 
   //=============================================================
-  // //FOR VERONIKA
   // Create TTree for analysis results
   mTree = new TTree("events", "Analysis Results");
   myTreeEvent = new MyTreeEvent();
@@ -367,12 +364,11 @@ Int_t StPicoDstAnalysisMaker::Make() {
 
 
   //=============================================================
-  // //FOR VERONIKA
+
   vector<TrackCandidate> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
-  vector<TrackCandidate> *partnerTracks = &myTreeEvent->partnerTracks;
-  TrackCandidate inclusiveTrack, partnerTrack;
+
+  TrackCandidate inclusiveTrack;
   inclusiveTracks->clear();
-  partnerTracks->clear();
 
 
   Float_t &vertexX = myTreeEvent->vertexX;
@@ -412,7 +408,6 @@ Int_t StPicoDstAnalysisMaker::Make() {
 
 
     //=============================================================
-    // //FOR VERONIKA
     inclusiveTrack.id = theTrack->id();
     inclusiveTrack.pt = theTrack->gPt();
     inclusiveTrack.eta = theTrack->gMom().Eta();
@@ -477,7 +472,6 @@ Int_t StPicoDstAnalysisMaker::Make() {
 
 
   //=============================================================
-  // //FOR VERONIKA
   mTree->Fill(); // Fill the TTree with the current myTreeEvent
  //=============================================================
 
