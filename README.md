@@ -32,10 +32,11 @@ cons
 ```bash
 root -l -b macros/runPicoDstAnalysisMaker.C
 ```
-It will create a `.root` file with your TTree and some QA histograms
-4. Now, one can perform your analysis on this newly created ttree with compiled (!) macro - notice + at the end
+It will create a `.root` file with your TTree and some QA histograms. If you are interested what are these [ROOT flags](https://root.cern.ch/root/html534/guides/users-guide/ROOTUsersGuide.html#start-and-quit-a-root-session) : `-l` - no splash screen, `-b` - stands for batchmode (no pictures showed), `-q` - quit after executing.
+
+4. Now, one can perform your analysis on this newly created TTree with compiled (!) macro - notice `+` at the end
 ```bash
-root -l -b macros/readMyTreeEvent.C+
+root -l -b -q macros/readMyTreeEvent.C+
 ```
 
 
