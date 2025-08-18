@@ -4,14 +4,6 @@ FROM ghcr.io/star-bnl/star-sw:main-root5-gcc485 as star-source
 # Stage 2: Main development container
 FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
-# Install additional tools
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    git \
-    docker.io \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy the star-sw directory from the source image
 COPY --from=star-source /star-sw /star-sw
 
