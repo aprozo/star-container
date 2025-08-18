@@ -12,13 +12,12 @@
   "remoteEnv": {
     "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
   },
+  "postCreateCommand": "docker pull ghcr.io/star-bnl/star-sw:main-root5-gcc485",
   "customizations": {
     "vscode": {
       "extensions": [
         "akamud.vscode-theme-onedark",
-        "ms-azuretools.vscode-docker",
         "ms-vscode.cpptools",
-        "llvm-vs-code-extensions.vscode-clangd",
         "albertopdrf.root-file-viewer"
       ]
     }

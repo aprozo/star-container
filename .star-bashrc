@@ -25,7 +25,3 @@ if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
 fi
-
-# STAR specific settings
-echo "STAR Software Environment Ready"
-echo "Working directory: $(pwd)"
