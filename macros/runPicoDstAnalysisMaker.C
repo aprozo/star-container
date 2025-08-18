@@ -11,7 +11,7 @@ class StPicoDstMaker;
 
 //_________________
 void runPicoDstAnalysisMaker(
-    const char *inFileName = "/workspaces/star-container/"
+    const char *inFileName = "/workspaces/star-tutorial/"
                              "st_physics_20069002_raw_1500008.picoDst.root") {
 
   std::cout << "Lets run the StPicoDstAnalysisMaker, Master" << std::endl;
