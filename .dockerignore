@@ -1,0 +1,52 @@
+# Build artifacts and temporary files
+*.o
+*.so
+*.d
+*.pcm
+*dict.cxx
+*dict.h
+*dictUmbrella.h
+*dictContent.h
+AutoDict*.cxx
+AutoDict*.h
+.sl*_gcc*
+temp_gccflags.c
+*.consign
+
+# ROOT files (large data files)
+*.root
+
+# Development environment
+.vscode/
+.rootrc
+.devcontainer/
+
+# Version control
+.git/
+.gitignore
+
+# Documentation and non-essential files
+README.md
+CLAUDE.md
+*.md
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/

@@ -2,7 +2,7 @@
 .rootrc
 .sl*_gcc*
 temp_gccflags.c
-.consign
+*.consign
 *.root
 AutoDict*.cxx
 AutoDict*.h
