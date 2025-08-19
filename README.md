@@ -44,11 +44,29 @@ root -l -b -q macros/readMyTreeEvent.C+
 ```
 
 
-
-### Some old presentation on DST tutorials:
+## Some old presentation on DST tutorials:
 
 - [Introduction to PicoDst](https://drupal.star.bnl.gov/STAR/system/files/Nigmatkulov_intro2pico_Krakow2019.pdf) (Grigory Nigmatkulov, 2019)
-- Introduction to MuDst:
-  - [Starting Data Analysis on STAR](http://nuclear.ucdavis.edu/~brovko/GettingStarted.pdf) (Samantha Brovko, 2011)
-  - [A common-MuDst tutorial](https://www.star.bnl.gov/public/comp/meet/RM200311/MuDstTutorial.pdf) (Sergey Panitkin, 2003)
+- [Starting Data Analysis on STAR](http://nuclear.ucdavis.edu/~brovko/GettingStarted.pdf) (Samantha Brovko, 2011)
+- [A common-MuDst tutorial](https://www.star.bnl.gov/public/comp/meet/RM200311/MuDstTutorial.pdf) (Sergey Panitkin, 2003)
 
+
+
+## Remark: Running in your own laptop
+In case you want to enter and run STAR container on your own laptop:
+
+- You need to install either [Docker engine](https://docs.docker.com/get-started/get-docker/) or [Apptainer (singularity)](https://apptainer.org/docs/admin/main/installation.html).
+For simplier Apptainer (singularity) installation:
+```bash
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository -y ppa:apptainer/ppa
+sudo apt update
+sudo apt install -y apptainer
+```
+And then run commands:
+```bash
+git clone https://github.com/aprozo/star-tutorial.git
+cd star-tutorial
+apptainer run docker://ghcr.io/star-bnl/star-sw:main-root5-gcc485 bash -l
+```
