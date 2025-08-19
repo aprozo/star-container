@@ -1,4 +1,4 @@
-# STAR Tutorial [![Github Codespace](https://img.shields.io/badge/open-GH_Codespaces-blue?logo=github)](https://codespaces.new/aprozo/star-tutorial?quickstart=1)
+# STAR StRoot Tutorial [![Github Codespace](https://img.shields.io/badge/open-GH_Codespaces-blue?logo=github)](https://codespaces.new/aprozo/star-tutorial?quickstart=1)
 
 
 This is an example analysis of [`StPicoDst`](https://www.star.bnl.gov/webdata/dox/html/classStPicoDstMaker.html):
@@ -11,16 +11,16 @@ It is based on [Grigory's presentation on PicoDst 2019](https://drupal.star.bnl.
 
 ## Introduction
 
-The star-sw version is [here](https://github.com/star-bnl/star-sw), which corresponds to the latest version `star pro` with compiler `gcc4.85` and `ROOT 5.34` version.
+The [starver](https://github.com/star-bnl/star-sw) corresponds to the latest version `star pro` with compiler `gcc4.85` and `ROOT 5.34` version.
 
-STAR uses [`cons` command](https://www.gnu.org/software/cons/stable/cons.html) to compile. This is similar to compiling projects using `Make` file or performing `g++` command within complex `C++` projects (whic STAR is).
+STAR uses [`cons` command](https://www.gnu.org/software/cons/stable/cons.html) to compile. This is similar to compiling projects using `Make` file or performing `g++` command with additional libs within complex `C++` projects (whic STAR is).
 The `cons` command will:
 - create a directory `.sl7X_gccXX` where all compiled libraries will go which are used in your project
 - perform compilation of all your files with `.cxx`(important!) and connected headers `.h` under `StRoot` directory.
 
  
 ## Run instructions:
-1. First, you'll need to enter the container, for that, type:
+1. First, you'll need to enter the STAR container, for that, type:
 ```bash
 star-shell
 ```
@@ -28,11 +28,15 @@ star-shell
 ```bash
 cons
 ```
-3. Now, one can run event analysis macro using
+3. Now, one can run event analysis macro using without(!) compilation (not using `+` sign at the end)
 ```bash
-root -l -b macros/runPicoDstAnalysisMaker.C
+root -l -b -q macros/runPicoDstAnalysisMaker.C
 ```
-It will create a `.root` file with your TTree and some QA histograms. If you are interested what are these [ROOT flags](https://root.cern.ch/root/html534/guides/users-guide/ROOTUsersGuide.html#start-and-quit-a-root-session) : `-l` - no splash screen, `-b` - stands for batchmode (no pictures showed), `-q` - quit after executing.
+It will create a `.root` file with your TTree and some QA histograms. 
+If you are interested what are these [ROOT flags](https://root.cern.ch/root/html534/guides/users-guide/ROOTUsersGuide.html#start-and-quit-a-root-session): 
+- `-l` - no splash screen
+- `-b` - stands for batchmode (no pictures showed),
+- `-q` - quit after executing.
 
 4. Now, one can perform your analysis on this newly created TTree with compiled (!) macro - notice `+` at the end
 ```bash
