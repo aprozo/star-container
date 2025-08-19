@@ -4,21 +4,21 @@
 #include <iostream>
 
 class MyTreeEvent;
-class TrackCandidate;
+class MyTrack;
 
 #include "../StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h"
-#include "../StRoot/StPicoDstAnalysisMaker/TrackCandidate.h"
+#include "../StRoot/StPicoDstAnalysisMaker/MyTrack.h"
 
 //==============================================================================
 // Class implementations for ROOT dictionary
 //==============================================================================
 #ifdef __MAKECINT__
-#pragma link C++ class TrackCandidate + ;
+#pragma link C++ class MyTrack + ;
 #pragma link C++ class MyTreeEvent + ;
-#pragma link C++ class std::vector < TrackCandidate> + ;
+#pragma link C++ class std::vector < MyTrack> + ;
 #endif
 // ClassImp implementations
-ClassImp(TrackCandidate);
+ClassImp(MyTrack);
 ClassImp(MyTreeEvent);
 
 void readMyTreeEvent(

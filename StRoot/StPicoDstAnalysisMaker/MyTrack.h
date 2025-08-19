@@ -3,7 +3,7 @@
 
 #include "TObject.h"
 
-class  TrackCandidate: public TObject {
+class  MyTrack: public TObject {
   // Class to represent a track candidate in the analysis
   // Contains basic properties of a track candidate
 public:
@@ -12,10 +12,10 @@ public:
     float eta;      // Pseudorapidity of the track candidate
     float phi;      // Azimuthal angle of the track candidate
     int charge;     // Electric charge of the track candidate
-    TrackCandidate() {}
-    ~TrackCandidate() {}
+    MyTrack() {}
+    ~MyTrack() {}
 
-  ClassDef(TrackCandidate, 1);
+  ClassDef(MyTrack, 1);
 };
 
 

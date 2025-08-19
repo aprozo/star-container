@@ -24,7 +24,7 @@
 
 #include "TTree.h"
 
-#include "TrackCandidate.h"
+#include "MyTrack.h"
 #include "MyTreeEvent.h"
 
 // C++ headers
@@ -365,9 +365,9 @@ Int_t StPicoDstAnalysisMaker::Make() {
 
   //=============================================================
 
-  vector<TrackCandidate> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
+  vector<MyTrack> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
 
-  TrackCandidate inclusiveTrack;
+  MyTrack inclusiveTrack;
   inclusiveTracks->clear();
 
 
