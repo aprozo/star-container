@@ -36,59 +36,12 @@ ClassImp(StPicoDstAnalysisMaker)
 StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(StPicoDstMaker *maker,
                                                const char* oFileName) :
   StMaker(), mDebug(false), mOutFileName(nullptr), mOutFile(nullptr),
-  mPicoDstMaker(maker), mPicoDstReader(nullptr), mPicoDst(nullptr), hVtxXvsY(nullptr),
+  mPicoDstMaker(maker), mPicoDst(nullptr), hVtxXvsY(nullptr),
   hVtxZ(nullptr), hPrimaryPt(nullptr), hGlobalNHits(nullptr),
   hPrimaryNHits(nullptr), hGlobalEta(nullptr), hPrimaryEta(nullptr),
   hPrimaryDedxVsPt(nullptr), hPrimaryInvBetaVsP(nullptr),
   hBemcTowerAdc(nullptr), mEventCounter(0), mIsFromMaker(true) {
   // Constructor
-
-  // Set output file name
-  mOutFileName = oFileName;
-
-  // Clean trigger ID collection
-  if( !mTriggerId.empty() ) {
-    mTriggerId.clear();
-  }
-
-  // Set default event cut values
-  mVtxZ[0] = -70.; mVtxZ[1] = 70.;
-  mVtxR[0] = 0.; mVtxR[1] = 2.;
-
-  // Set default track cut values
-  mNHits[0] = 15; mNHits[1] = 90;
-  mPt[0] = 0.15; mPt[1] = 10.;
-  mEta[0] = -1.; mEta[1] = 1.;
-}
-
-//________________
-StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(const char* inFileName,
-                                               const char* oFileName) :
-  StMaker(), mDebug(false), mOutFileName(nullptr), mOutFile(nullptr),
-  mPicoDstMaker(nullptr), mPicoDstReader(nullptr), mPicoDst(nullptr), hVtxXvsY(nullptr),
-  hVtxZ(nullptr), hPrimaryPt(nullptr), hGlobalNHits(nullptr),
-  hPrimaryNHits(nullptr), hGlobalEta(nullptr), hPrimaryEta(nullptr),
-  hPrimaryDedxVsPt(nullptr), hPrimaryInvBetaVsP(nullptr),
-  hBemcTowerAdc(nullptr), mEventCounter(0), mIsFromMaker(false) {
-  // Constructor
-
-  // Initialize StPicoDstMaker:
-  // \param I/O mode: IoWrite=1, IoRead=2,
-  // \param inFileName: name.picoDst.root or name.lis(t) that contains list of name.picoDst.root
-  // \param name: for StMaker init
-  // Instead of StPicoDstMaker one can use StPicoDstReader
-  mPicoDstReader = new StPicoDstReader(inFileName);
-
-  // Manual branch switching ON/OFF (all branches are ON by default)
-  // Turn off unused branches (will increase picoDst I/O speed)
-
-  // Switch all branches off
-  mPicoDstReader->SetStatus("*",0);
-  // Turn on specific branches
-  mPicoDstReader->SetStatus("Event*", 1);
-  mPicoDstReader->SetStatus("Track*", 1);
-  mPicoDstReader->SetStatus("BTofPidTraits*", 1);
-  mPicoDstReader->SetStatus("BTowHit*", 1);
 
   // Set output file name
   mOutFileName = oFileName;
@@ -123,28 +76,13 @@ Int_t StPicoDstAnalysisMaker::Init() {
   }
 
   // Retrieve PicoDst
-  if ( mIsFromMaker ) {
-    // Check that StPicoDstMaker exists
-    if (mPicoDstMaker) {
-      // Retrieve pointer to the StPicoDst structure
-      mPicoDst = mPicoDstMaker->picoDst();
-    }
-    else {
-      LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endm;
-      return kStErr;
-    }
-  } // if ( mIsFromMaker )
-  else {
-    // Check that StPicoDstReader exists
-    if ( mPicoDstReader ) {
-      // Retrieve pointer to the StPicoDst structure
-      mPicoDst = mPicoDstReader->picoDst();
-    }
-    else {
-      LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endm;
-      return kStErr;
-    }
-  } // else
+  if (mPicoDstMaker) {
+    // Retrieve pointer to the StPicoDst structure
+    mPicoDst = mPicoDstMaker->picoDst();
+  } else {
+    LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endm;
+    return kStErr;
+  }
 
   // Check that picoDst exists
   if (!mPicoDst) {

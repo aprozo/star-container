@@ -21,7 +21,6 @@ class StPicoDstMaker;
 
 // StPicoEvent
 class StPicoDst;
-class StPicoDstReader;
 class StPicoEvent;
 class StPicoTrack;
 
@@ -43,14 +42,7 @@ class StPicoDstAnalysisMaker : public StMaker {
   /// This constructor provides an example of how to use StPicoDstMaker/StPicoDstMaker.h(cxx)
   StPicoDstAnalysisMaker(StPicoDstMaker *maker,
                          const char* oFileName = "oStPicoDstAnalysisMaker.root" );
-  /// Constructor
-  /// \param inFileName Name of the input name.picoDst.root file or a name.lis(t)
-  ///                   file with a list of name.picoDst.root files
-  /// \param oFileName Name of the output file where the histograms will
-  ///                   be stored
-  /// This constructor shows how to access data using StPicoEvent/StPicoDstReader.h(cxx)
-  StPicoDstAnalysisMaker(const char* inFileName,
-                         const char* oFileName = "oStPicoDstAnalysisMaker.root");
+
   /// Destructor
   virtual ~StPicoDstAnalysisMaker();
 
@@ -60,10 +52,6 @@ class StPicoDstAnalysisMaker : public StMaker {
   virtual Int_t Make();
   /// Finish method inherited from StMaker
   virtual Int_t Finish();
-
-  //
-  // Setters
-  //
 
   /// Set debug status
   void setDebugStatus(bool status)                      { mDebug = status; }
@@ -126,10 +114,8 @@ class StPicoDstAnalysisMaker : public StMaker {
   /// Output file
   TFile *mOutFile;
   
-  /// Pointer to StPicoDstMaker
+
   StPicoDstMaker *mPicoDstMaker;
-  /// Instead of StPicoDstMaker one can use StPicoDstReader
-  StPicoDstReader *mPicoDstReader;
   
   // Pointer to StPicoDst
   StPicoDst *mPicoDst;
@@ -159,15 +145,10 @@ class StPicoDstAnalysisMaker : public StMaker {
   Bool_t mIsFromMaker;
 
 
-  //=============================================================
-  //FOR VERONIKA
   TTree *mTree; // Tree to store analysis results
   MyTreeEvent *myTreeEvent; // Object to hold event data
 
   //=============================================================
-
-
-
 
 
 

@@ -52,14 +52,6 @@ void runPicoDstAnalysisMaker(
   anaMaker1->setVtxZ(-40., 40.);
   std::cout << "... done" << std::endl;
 
-  // std::cout << "Constructing StPicoDstAnalysisMaker with file list and will
-  // use StPicoDstReader"; Example of how to create an instance of the
-  // StPicoDstAnalysisMaker and initialize it with StPicoDstRader
-  // StPicoDstAnalysisMaker *anaMaker2 = new StPicoDstAnalysisMaker(inFileName,
-  // "oPicoAnaMaker_2.root");
-  // // Add vertex cut
-  // anaMaker2->setVtxZ(-50., 50.);
-  // std::cout << "... done" << std::endl;
 
   std::cout << "Initializing chain" << std::endl;
   // Check that all maker has been successfully initialized
