@@ -3,7 +3,7 @@
 
 #include "TObject.h"
 
-class  MyTrack: public TObject {
+class  MyTrack {
   // Class to represent a track candidate in the analysis
   // Contains basic properties of a track candidate
 public:

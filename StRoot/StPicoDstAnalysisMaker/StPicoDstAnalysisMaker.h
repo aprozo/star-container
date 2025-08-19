@@ -35,17 +35,10 @@ class StPicoDstAnalysisMaker : public StMaker {
 
  public:
   /// Constructor
-  /// \param maker Takes a pointer to StPicoDstMaker that was initialized
-  ///              in the launching macro and passed as an argument
-  /// \param oFileName Name of the output file where the histograms will
-  ///                  be stored
-  /// This constructor provides an example of how to use StPicoDstMaker/StPicoDstMaker.h(cxx)
   StPicoDstAnalysisMaker(StPicoDstMaker *maker,
                          const char* oFileName = "oStPicoDstAnalysisMaker.root" );
-
   /// Destructor
   virtual ~StPicoDstAnalysisMaker();
-
   /// Init method inherited from StMaker
   virtual Int_t Init();
   /// Make method inherited from StMaker
@@ -76,12 +69,6 @@ class StPicoDstAnalysisMaker : public StMaker {
 
   /// Create histograms
   void CreateHistograms();
-  /// Create event histograms
-  void CreateEventHistograms();
-  /// Create track histograms
-  void CreateTrackHistograms();
-  /// Create BEMC hit histograms
-  void CreateBemcHitHistograms();
 
   /// Check the at least one triggers to select is in the event triggers list
   Bool_t IsGoodTrigger(StPicoEvent *event);
@@ -113,7 +100,6 @@ class StPicoDstAnalysisMaker : public StMaker {
   const char* mOutFileName;
   /// Output file
   TFile *mOutFile;
-  
 
   StPicoDstMaker *mPicoDstMaker;
   
@@ -147,10 +133,6 @@ class StPicoDstAnalysisMaker : public StMaker {
 
   TTree *mTree; // Tree to store analysis results
   MyTreeEvent *myTreeEvent; // Object to hold event data
-
-  //=============================================================
-
-
 
   ClassDef(StPicoDstAnalysisMaker, 0)
 };

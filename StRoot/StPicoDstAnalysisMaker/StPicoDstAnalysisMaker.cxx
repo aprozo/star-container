@@ -41,8 +41,6 @@ StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(StPicoDstMaker *maker,
   hPrimaryNHits(nullptr), hGlobalEta(nullptr), hPrimaryEta(nullptr),
   hPrimaryDedxVsPt(nullptr), hPrimaryInvBetaVsP(nullptr),
   hBemcTowerAdc(nullptr), mEventCounter(0), mIsFromMaker(true) {
-  // Constructor
-
   // Set output file name
   mOutFileName = oFileName;
 
@@ -74,7 +72,6 @@ Int_t StPicoDstAnalysisMaker::Init() {
   if (mDebug) {
     LOG_INFO << "Initializing StPicoDstAnalysisMaker..." << endm;
   }
-
   // Retrieve PicoDst
   if (mPicoDstMaker) {
     // Retrieve pointer to the StPicoDst structure
@@ -102,15 +99,12 @@ Int_t StPicoDstAnalysisMaker::Init() {
   // Create histograms
   CreateHistograms();
 
-
-  //=============================================================
+  //---------------------------------------------------------------------------
   // Create TTree for analysis results
   mTree = new TTree("events", "Analysis Results");
   myTreeEvent = new MyTreeEvent();
   mTree->Branch("MyTreeEvent", &myTreeEvent);
-  //=============================================================
-
-
+  //---------------------------------------------------------------------------
 
   if (mDebug) {
     LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endm;
@@ -150,40 +144,12 @@ void StPicoDstAnalysisMaker::CreateHistograms() {
   if (mDebug) {
     LOG_INFO << "Creating histograms..." << endm;
   }
-
-  CreateEventHistograms();
-  CreateTrackHistograms();
-  CreateBemcHitHistograms();
-
-  if (mDebug) {
-    LOG_INFO << "Histograms have been created" << endm;
-  }
-}
-
-//________________
-void StPicoDstAnalysisMaker::CreateEventHistograms() {
-
-  if (mDebug) {
-    LOG_INFO << "Creating event histograms...";
-  }
-
+   //--------------------------------------------------------------------------  
   hVtxXvsY = new TH2F("hVtxXvsY","Primary vertex y vs. x;x (cm);y (cm)",
                       200, -10., 10., 200, -10., 10.);
   hVtxZ = new TH1F("hVtxZ","Primary vertex z;z (cm); Entries",
                    240, -120., 120.);
-
-  if (mDebug) {
-    LOG_INFO << "\t[DONE]" << endm;
-  }
-}
-
-//________________
-void StPicoDstAnalysisMaker::CreateTrackHistograms() {
-
-  if (mDebug) {
-    LOG_INFO << "Creating track histograms...";
-  }
-
+  //--------------------------------------------------------------------------  
   hGlobalPt = new TH1D("hGlobalPt","Global track p_{T};p_{T} (GeV/c);Entries",
                       200, 0., 10.);
   hGlobalNHits = new TH1D("hGlobalNHits","Global track number of hits;nHits;Entries",
@@ -200,24 +166,11 @@ void StPicoDstAnalysisMaker::CreateTrackHistograms() {
                               300, -1.5, 1.5, 120, 0., 12.);
   hPrimaryInvBetaVsP = new TH2F("hPrimaryInvBetaVsP","Primary track 1/#beta vs. p;charge #cross p (GeV/c);1/#beta",
                                 420, -2.1, 2.1, 200, 0.8, 2.8);
-
-  if (mDebug) {
-    LOG_INFO << "\t[DONE]" << endm;
-  }
-}
-
-//________________
-void StPicoDstAnalysisMaker::CreateBemcHitHistograms() {
-
-  if (mDebug) {
-    LOG_INFO << "Creating BEMC hit histograms...";
-  }
-
+  //--------------------------------------------------------------------------  
   hBemcTowerAdc = new TH1D("hBemcTowerAdc","BEMC tower ADC;ADC;Entries",
                            500, 0., 3000.);
-
   if (mDebug) {
-    LOG_INFO << "\t[DONE]" << endm;
+    LOG_INFO << "Histograms have been created" << endm;
   }
 }
 
@@ -276,11 +229,9 @@ Int_t StPicoDstAnalysisMaker::Make() {
     LOG_ERROR << "[ERROR] No PicoDst has been found. Terminating" << endm;
     return kStErr;
   }
-
   //
   // The example that shows how to access event information
   //
-
   // Retrieve pico event
   StPicoEvent *theEvent = mPicoDst->event();
   if ( !theEvent ) {
@@ -294,14 +245,11 @@ Int_t StPicoDstAnalysisMaker::Make() {
     return kStOk;
   }
 
-
   // Fill event histograms
   hVtxXvsY->Fill( theEvent->primaryVertex().X(),
                   theEvent->primaryVertex().Y() );
   hVtxZ->Fill( theEvent->primaryVertex().Z() );
 
-
-  //=============================================================
 
   vector<MyTrack> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
 
@@ -309,20 +257,20 @@ Int_t StPicoDstAnalysisMaker::Make() {
   inclusiveTracks->clear();
 
 
-  Float_t &vertexX = myTreeEvent->vertexX;
-  Float_t &vertexY = myTreeEvent->vertexY;
-  Float_t &vertexZ = myTreeEvent->vertexZ;
+  float &vertexX = myTreeEvent->vertexX;
+  float &vertexY = myTreeEvent->vertexY;
+  float &vertexZ = myTreeEvent->vertexZ;
 
   vertexX = theEvent->primaryVertex().X();
   vertexY = theEvent->primaryVertex().Y();
   vertexZ = theEvent->primaryVertex().Z();
 
-  Int_t &centrality = myTreeEvent->centrality;
-  Int_t &eventId = myTreeEvent->eventId;
-  // centrality = 
 
-  // //=============================================================
+  int &eventId = myTreeEvent->eventId;
+  int &runId = myTreeEvent->runId;
 
+  eventId = theEvent->eventId();
+  runId = theEvent->runId();
   //
   // The example that shows how to access track information
   //
@@ -331,7 +279,6 @@ Int_t StPicoDstAnalysisMaker::Make() {
   // SetStatus("Track*",1) is set to 1. In case of 0 the number
   // of stored tracks will be 0, even if those exist
   unsigned int nTracks = mPicoDst->numberOfTracks();
-
 
   // Track loop
   for (unsigned int iTrk=0; iTrk<nTracks; iTrk++) {
@@ -352,9 +299,7 @@ Int_t StPicoDstAnalysisMaker::Make() {
     inclusiveTrack.phi = theTrack->gMom().Phi();
     inclusiveTrack.charge = theTrack->charge();
     inclusiveTracks->push_back(inclusiveTrack);
- //=============================================================
-
-
+   //=============================================================
 
     // Fill global track parameters
     hGlobalPt->Fill( theTrack->gPt() );
@@ -384,7 +329,7 @@ Int_t StPicoDstAnalysisMaker::Make() {
       hPrimaryInvBetaVsP->Fill( theTrack->charge() * theTrack->pPt(),
                                 1./trait->btofBeta() );
     } // if ( theTrack->isTofTrack() )
-  } // for (Int_t iTrk=0; iTrk<nTracks; iTrk++)
+  } // track loop
 
   //
   // The example that shows how to access hit information
@@ -396,7 +341,6 @@ Int_t StPicoDstAnalysisMaker::Make() {
 
   // Dummy check, but always good to know that the amount is okay
   if (nBTowHits > 0) {
-
     // Loop over BTOW hits
     for (UInt_t iHit=0; iHit<nBTowHits; iHit++) {
       // Retrieve i-th BTOW hit
@@ -405,7 +349,7 @@ Int_t StPicoDstAnalysisMaker::Make() {
       if (!btowHit) continue;
       // Fill tower ADC
       hBemcTowerAdc->Fill( btowHit->adc() );
-    } // for (UInt_t iHit=0; iHit<nBTowHits; iHit++)
+    } // hit loop
   } // if (nBTowHits > 0)
 
 
