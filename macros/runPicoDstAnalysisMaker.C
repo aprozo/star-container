@@ -6,7 +6,6 @@
 class StMaker;
 class StChain;
 class StPicoDstMaker;
-
 //_________________
 void runPicoDstAnalysisMaker(const char *inFileName = "/workspaces/star-tutorial/st_physics_20069002_raw_1500008.picoDst.root") {
   std::cout << "Lets run the StPicoDstAnalysisMaker" << std::endl;
@@ -20,7 +19,6 @@ void runPicoDstAnalysisMaker(const char *inFileName = "/workspaces/star-tutorial
   gSystem->AddDynamicPath(gSystem->ExpandPathName("$PWD/.sl79_gcc485/LIB"));
   gSystem->Load("StPicoDstAnalysisMaker");
 
-  // Create new chain
   StChain *chain = new StChain();
 
   std::cout << "Creating StPicoDstMaker to read and pass file list"<< std::endl;
@@ -35,50 +33,40 @@ void runPicoDstAnalysisMaker(const char *inFileName = "/workspaces/star-tutorial
   // picoMaker->SetStatus("BTowHit*", 1);
   std::cout << "... done" << std::endl;
 
-  std::cout << "Constructing StPicoDstAnalysisMaker with StPicoDstMaker"
-            << std::endl;
-  // Example of how to create an instance of the StPicoDstAnalysisMaker and
-  // initialize it with StPicoDstMaker
-  StPicoDstAnalysisMaker *anaMaker = new StPicoDstAnalysisMaker(picoMaker, "outputPicoAnaMaker.root");
+  std::cout << "Constructing StPicoDstAnalysisMaker with StPicoDstMaker" << std::endl;  
+  StPicoDstAnalysisMaker *anaMaker = new StPicoDstAnalysisMaker(picoMaker, "outputPicoAnaMaker.root"); // Create an instance of the StPicoDstAnalysisMaker and initialize it with StPicoDstMaker
   // Add vertex cut or some other cuts
   anaMaker->setVtxZ(-40., 40.);
   std::cout << "... done" << std::endl;
 
   std::cout << "Initializing chain" << std::endl;
-  // Check that all maker has been successfully initialized
   if (chain->Init() == kStErr) {
     std::cout << "Error during the chain initializtion. Exit. " << std::endl;
     return;
   }
   std::cout << "... done" << std::endl;
-
-  // Retrieve number of events picoDst files
   int nEvents = picoMaker->chain()->GetEntries();
   std::cout << " Number of events in files: " << nEvents << std::endl;
   // Also one can set a very large number to process, whyle the special return
   // flag will send when there will be EndOfFile (EOF)
-  // Processing events
   for (Int_t iEvent = 0; iEvent < nEvents; iEvent++) {
-
     if (iEvent % 1000 == 0)
       std::cout << "Macro: working on event: " << iEvent << std::endl;
     chain->Clear();
-    // Check return code
-    int iret = chain->Make();
-    // Quit event processing if return code is not 0
-    if (iret) {
+
+    int iret = chain->Make();     // Execute the chain and check return code
+
+    if (iret) {   // Quit event processing if return code is not 0
       std::cout << "Bad return code! " << iret << std::endl;
       break;
     }
-  } // for (Int_t iEvent=0; iEvent<nEvents; iEvent++)
+  } // event loop
 
   std::cout << "Finalizing chain" << std::endl;
-  // Finalize all makers in chain
-  chain->Finish();
+  chain->Finish();  // Finalize all makers in chain
   std::cout << "... done" << std::endl;
 
-  // Delete all pointers
-
+  // Delete all dynamically allocated objects to free memory
   delete anaMaker;
   delete picoMaker;
   delete chain;

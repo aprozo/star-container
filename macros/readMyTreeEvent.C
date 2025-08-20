@@ -6,7 +6,8 @@
 class MyTreeEvent;
 class MyTrack;
 
-#include "../StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h"
+// one may need to copy header files on personal laptop - instructions how to read your TTree
+#include "../StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h" 
 #include "../StRoot/StPicoDstAnalysisMaker/MyTrack.h"
 
 //==============================================================================
