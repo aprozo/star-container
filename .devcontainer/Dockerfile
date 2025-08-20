@@ -6,6 +6,7 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 # Copy the star-sw directory from the source image
 COPY --from=star-source /star-sw/StRoot /star-sw/StRoot
+COPY --from=star-source /opt/software/linux-scientific7-x86_64/gcc-4.8.5/root-5.34.38-ffhsnriu5ktoo4tieuku5tbezanz6q5g /opt/software/root-5.34-38
 
 # Modified star-shell script with mounted paths
 RUN echo '#!/bin/bash\n\

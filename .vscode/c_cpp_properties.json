@@ -1,9 +1,11 @@
-{
+{   
     "configurations": [
         {
+            "name": "MyStarEnv",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/star-sw/StRoot/**"
+                "/star-sw/StRoot/**",
+                "/opt/software/root-5.34-38/include"
             ],
             "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/gcc",

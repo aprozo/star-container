@@ -57,18 +57,18 @@ StPicoDstAnalysisMaker::~StPicoDstAnalysisMaker() {
 Int_t StPicoDstAnalysisMaker::Init() {
   // Initialization of the Maker
   if (mDebug) {
-    LOG_INFO << "Initializing StPicoDstAnalysisMaker..." << endm;
+    LOG_INFO << "Initializing StPicoDstAnalysisMaker..." << endl;
   }
   if (mPicoDstMaker) {
 
     mPicoDst = mPicoDstMaker->picoDst();    // Retrieve pointer to the StPicoDst structure
   } else {
-    LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endm;
+    LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endl;
     return kStErr;
   }
 
   if (!mPicoDst) {   // Check that picoDst exists
-    LOG_ERROR << "[ERROR] No StPicoDst has been provided. Terminating." << endm;
+    LOG_ERROR << "[ERROR] No StPicoDst has been provided. Terminating." << endl;
     return kStErr;
   }
 
@@ -77,7 +77,7 @@ Int_t StPicoDstAnalysisMaker::Init() {
   }
   else {
     LOG_WARN << "\n [WARNING] Output file: " << mOutFileName
-             << " already exist!" << endm;
+             << " already exist!" << endl;
   }
 
   // Create TTree for analysis results
@@ -88,7 +88,7 @@ Int_t StPicoDstAnalysisMaker::Init() {
   CreateHistograms();
 
   if (mDebug) {
-    LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endm;
+    LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endl;
   }
   return kStOk;
 }
@@ -96,21 +96,21 @@ Int_t StPicoDstAnalysisMaker::Init() {
 //________________
 Int_t StPicoDstAnalysisMaker::Finish() {   // Finalization of the Maker
   if (mDebug) {
-    LOG_INFO << "Finishing StPicoDstAnalysisMaker..." << endm;
+    LOG_INFO << "Finishing StPicoDstAnalysisMaker..." << endl;
   }
 
   if (mOutFile) {   // Write histograms to the file and then close it
     LOG_INFO << "Writing file: " << mOutFileName;
     mOutFile->Write(); 
     mOutFile->Close();
-    LOG_INFO << "\t[DONE]" << endm;
+    LOG_INFO << "\t[DONE]" << endl;
   }
   else {
-    LOG_WARN << "[WARNING] Output file does not exist. Nowhere to write!" << endm;
+    LOG_WARN << "[WARNING] Output file does not exist. Nowhere to write!" << endl;
   }
 
   if (mDebug) {
-    LOG_INFO << "StPicoDstAnalysisMaker has been finalized\n" << endm;
+    LOG_INFO << "StPicoDstAnalysisMaker has been finalized\n" << endl;
   }
   return kStOk;
 }
@@ -118,7 +118,7 @@ Int_t StPicoDstAnalysisMaker::Finish() {   // Finalization of the Maker
 //________________
 void StPicoDstAnalysisMaker::CreateHistograms() {
   if (mDebug) {
-    LOG_INFO << "Creating histograms..." << endm;
+    LOG_INFO << "Creating histograms..." << endl;
   }
   TDirectory *dir = gDirectory;
   dir->mkdir("qa_histograms")->cd(); // create a directory where one can put all histograms
@@ -144,7 +144,7 @@ void StPicoDstAnalysisMaker::CreateHistograms() {
   //--------------------------------------------------------------------------  
   hBemcTowerAdc = new TH1D("hBemcTowerAdc","BEMC tower ADC; ADC; Entries", 500, 0., 3000.);
   if (mDebug) {
-    LOG_INFO << "Histograms have been created" << endm;
+    LOG_INFO << "Histograms have been created" << endl;
   }
 }
 
