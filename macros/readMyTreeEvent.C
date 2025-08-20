@@ -39,7 +39,7 @@ void readMyTreeEvent(TString filename = "/workspaces/star-tutorial/outputPicoAna
     std::cout << "\n--- Entry " << i << " ---" << std::endl;
     std::cout << "Run ID: " << event->runId << std::endl;
     std::cout << "Event ID: " << event->eventId << std::endl;
-    std::cout << "Vertex Z: " << event->vertexZ << " mm" <<std::endl;
+    std::cout << "Vertex Z: " << event->vertexZ << " cm " <<std::endl;
 
     // Access the track vectors
     std::cout << "Inclusive tracks: " << event->inclusiveTracks.size()

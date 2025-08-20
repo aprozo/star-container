@@ -32,9 +32,9 @@ ClassImp(StPicoDstAnalysisMaker)
 //________________
 StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(StPicoDstMaker *maker,
                                                TString oFileName) :
-  StMaker(), mDebug(false), mOutFileName(oFileName), mOutFile(nullptr), //this is initiation list 
-  mPicoDstMaker(maker), mPicoDst(nullptr){            //at the time of creation
- 
+  StMaker(), mDebug(false), mOutFileName(oFileName), mOutFile(nullptr), //this is initialization list
+  mPicoDstMaker(maker), mPicoDst(nullptr){                              //at the time of object creation
+
   // Clean trigger ID collection
   if( !mTriggerId.empty() ) {
     mTriggerId.clear();
@@ -56,61 +56,52 @@ StPicoDstAnalysisMaker::~StPicoDstAnalysisMaker() {
 //________________
 Int_t StPicoDstAnalysisMaker::Init() {
   // Initialization of the Maker
-
   if (mDebug) {
     LOG_INFO << "Initializing StPicoDstAnalysisMaker..." << endm;
   }
-  // Retrieve PicoDst
   if (mPicoDstMaker) {
-    // Retrieve pointer to the StPicoDst structure
-    mPicoDst = mPicoDstMaker->picoDst();
+
+    mPicoDst = mPicoDstMaker->picoDst();    // Retrieve pointer to the StPicoDst structure
   } else {
     LOG_ERROR << "[ERROR] No StPicoDstMaker has been found. Terminating." << endm;
     return kStErr;
   }
 
-  // Check that picoDst exists
-  if (!mPicoDst) {
+  if (!mPicoDst) {   // Check that picoDst exists
     LOG_ERROR << "[ERROR] No StPicoDst has been provided. Terminating." << endm;
     return kStErr;
   }
-  // Create output file
+
   if (!mOutFile) {
-    mOutFile = new TFile(mOutFileName, "recreate");
+    mOutFile = new TFile(mOutFileName, "recreate");  // Create output file
   }
   else {
     LOG_WARN << "\n [WARNING] Output file: " << mOutFileName
              << " already exist!" << endm;
   }
 
-  //---------------------------------------------------------------------------
   // Create TTree for analysis results
   mTree = new TTree("events", "Analysis Results");
   myTreeEvent = new MyTreeEvent();
   mTree->Branch("MyTreeEvent", &myTreeEvent);
-  //---------------------------------------------------------------------------
-  // Create histograms
+
   CreateHistograms();
 
   if (mDebug) {
     LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endm;
   }
-
   return kStOk;
 }
 
 //________________
-Int_t StPicoDstAnalysisMaker::Finish() {
-  // Initialization of the Maker
-
+Int_t StPicoDstAnalysisMaker::Finish() {   // Finalization of the Maker
   if (mDebug) {
     LOG_INFO << "Finishing StPicoDstAnalysisMaker..." << endm;
   }
 
-  // Write histograms to the file and then close it
-  if (mOutFile) {
+  if (mOutFile) {   // Write histograms to the file and then close it
     LOG_INFO << "Writing file: " << mOutFileName;
-    mOutFile->Write();
+    mOutFile->Write(); 
     mOutFile->Close();
     LOG_INFO << "\t[DONE]" << endm;
   }
@@ -119,9 +110,8 @@ Int_t StPicoDstAnalysisMaker::Finish() {
   }
 
   if (mDebug) {
-    LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endm;
+    LOG_INFO << "StPicoDstAnalysisMaker has been finalized\n" << endm;
   }
-
   return kStOk;
 }
 
@@ -130,34 +120,29 @@ void StPicoDstAnalysisMaker::CreateHistograms() {
   if (mDebug) {
     LOG_INFO << "Creating histograms..." << endm;
   }
-
   TDirectory *dir = gDirectory;
-  dir->mkdir("qa_histograms")->cd();
+  dir->mkdir("qa_histograms")->cd(); // create a directory where one can put all histograms
    //--------------------------------------------------------------------------  
-  hVtxXvsY = new TH2F("hVtxXvsY","Primary vertex y vs. x;x (cm);y (cm)",
-                      200, -10., 10., 200, -10., 10.);
-  hVtxZ = new TH1F("hVtxZ","Primary vertex z;z (cm); Entries",
-                   240, -120., 120.);
+  hVtxXvsY = new TH2F("hVtxXvsY","Primary vertex y vs. x;x (cm);y (cm)", 200, -10., 10., 200, -10., 10.);
+  hVtxZ = new TH1F("hVtxZ","Primary vertex z; z (cm); Entries", 240, -120., 120.);
   //--------------------------------------------------------------------------  
-  hGlobalPt = new TH1D("hGlobalPt","Global track p_{T};p_{T} (GeV/c);Entries",
-                      200, 0., 10.);
-  hGlobalNHits = new TH1D("hGlobalNHits","Global track number of hits;nHits;Entries",
+  hGlobalPt = new TH1D("hGlobalPt","Global track p_{T}; p_{T} (GeV/c); Entries", 200, 0., 10.);
+  hGlobalNHits = new TH1D("hGlobalNHits","Global track number of hits; nHits; Entries",
                           90, 0., 90.);
-  hGlobalEta = new TH1D("hGlobalEta","Global track #eta;#eta;Entries",
+  hGlobalEta = new TH1D("hGlobalEta","Global track #eta; #eta; Entries",
                         300, -1.5, 1.5);
-  hPrimaryPt = new TH1D("hPrimaryPt","Primary track p_{T};p_{T} (GeV/c);Entries",
+  hPrimaryPt = new TH1D("hPrimaryPt","Primary track p_{T}; p_{T} (GeV/c); Entries",
                       200, 0., 10.);
-  hPrimaryNHits = new TH1D("hPrimaryNHits","Primary track number of hits;nHits;Entries",
+  hPrimaryNHits = new TH1D("hPrimaryNHits","Primary track number of hits; nHits; Entries",
                           90, 0., 90.);
-  hPrimaryEta = new TH1D("hPrimaryEta","Primary track #eta;#eta;Entries",
+  hPrimaryEta = new TH1D("hPrimaryEta","Primary track #eta; #eta; Entries",
                         300, -1.5, 1.5);
-  hPrimaryDedxVsPt = new TH2F("hPrimaryDedxVsPt","Primary track dE/dx vs. p_{T};charge #cross p_{T} (GeV/c);dE/dx (keV/cm)",
+  hPrimaryDedxVsPt = new TH2F("hPrimaryDedxVsPt","Primary track dE/dx vs. p_{T}; charge #cross p_{T} (GeV/c); dE/dx (keV/cm)",
                               300, -1.5, 1.5, 120, 0., 12.);
-  hPrimaryInvBetaVsP = new TH2F("hPrimaryInvBetaVsP","Primary track 1/#beta vs. p;charge #cross p (GeV/c);1/#beta",
+  hPrimaryInvBetaVsP = new TH2F("hPrimaryInvBetaVsP","Primary track 1/#beta vs. p; charge #cross p (GeV/c); 1/#beta",
                                 420, -2.1, 2.1, 200, 0.8, 2.8);
   //--------------------------------------------------------------------------  
-  hBemcTowerAdc = new TH1D("hBemcTowerAdc","BEMC tower ADC;ADC;Entries",
-                           500, 0., 3000.);
+  hBemcTowerAdc = new TH1D("hBemcTowerAdc","BEMC tower ADC; ADC; Entries", 500, 0., 3000.);
   if (mDebug) {
     LOG_INFO << "Histograms have been created" << endm;
   }
@@ -197,62 +182,34 @@ Bool_t StPicoDstAnalysisMaker::TrackCut(StPicoTrack *track) {
 
 //________________
 Int_t StPicoDstAnalysisMaker::Make() {
-  // Make is executed on every new event
-
+  // Make() is executed on every new event
   // The example that shows how to access event information
-  //
-  // Retrieve pico event
-  StPicoEvent *theEvent = mPicoDst->event();
 
-  // Check if event passes event cut (declared and defined in this
-  // analysis maker)
-  if ( !EventCut(theEvent) ) {
+  StPicoEvent *currentEvent = mPicoDst->event();
+  if ( !EventCut(currentEvent) )
     return kStOk;
-  }
 
   // Fill event histograms
-  hVtxXvsY->Fill( theEvent->primaryVertex().X(),
-                  theEvent->primaryVertex().Y() );
-  hVtxZ->Fill( theEvent->primaryVertex().Z() );
+  hVtxXvsY->Fill( currentEvent->primaryVertex().X(), currentEvent->primaryVertex().Y() );
+  hVtxZ->Fill( currentEvent->primaryVertex().Z() );
 
   // Create references to event-level data for easier access
   vector<MyTrack> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
 
-  MyTrack inclusiveTrack;
   inclusiveTracks->clear();
+  myTreeEvent->vertexX = currentEvent->primaryVertex().X();
+  myTreeEvent->vertexY = currentEvent->primaryVertex().Y();
+  myTreeEvent->vertexZ = currentEvent->primaryVertex().Z();
+  myTreeEvent->eventId = currentEvent->eventId();
+  myTreeEvent->runId = currentEvent->runId();
 
+  unsigned int nTracks = mPicoDst->numberOfTracks();// Get number of tracks in the event
 
-  float &vertexX = myTreeEvent->vertexX;
-  float &vertexY = myTreeEvent->vertexY;
-  float &vertexZ = myTreeEvent->vertexZ;
-
-  vertexX = theEvent->primaryVertex().X();
-  vertexY = theEvent->primaryVertex().Y();
-  vertexZ = theEvent->primaryVertex().Z();
-
-
-  int &eventId = myTreeEvent->eventId;
-  int &runId = myTreeEvent->runId;
-
-  eventId = theEvent->eventId();
-  runId = theEvent->runId();
-  //
-  // The example that shows how to access track information
-  //
-
-  // Get number of tracks in the event
-  unsigned int nTracks = mPicoDst->numberOfTracks();
-
-  // Track loop
+  // Loop over all tracks in the event
   for (unsigned int iTrack=0; iTrack<nTracks; iTrack++) {
-
-    // Retrieve i-th pico track
     StPicoTrack *track = (StPicoTrack*)mPicoDst->track(iTrack);
-    // Track must exist
-    if (!track) continue;
-
-    // Check if track passes track cut
-    if ( !TrackCut(track) ) continue;
+    if (!track) continue;  // Track must exist
+    if ( !TrackCut(track) ) continue;  // Check if track passes track cut
 
     MyTrack myTrack; // create a temporary MyTrack object to store track information
     //=============================================================
@@ -284,27 +241,19 @@ Int_t StPicoDstAnalysisMaker::Make() {
       StPicoBTofPidTraits *trait =
         (StPicoBTofPidTraits*)mPicoDst->btofPidTraits( track->bTofPidTraitsIndex() );
       if (!trait) continue;
-
-      // Fill primary track TOF information
       hPrimaryInvBetaVsP->Fill( track->charge() * track->pPt(),
                                 1./trait->btofBeta() );
     } // if ( track->isTofTrack() )
   } // track loop
 
-  // The example that shows how to access hit information
-  //
-  // Note: If the number of BTOW hits is 0, it might be because the
-  //       BTowHit branch is not enabled or there are genuinely no hits.
+  // Loop over all BEMC tower hits in the event
   for (UInt_t iHit=0; iHit<mPicoDst->numberOfBTowHits(); iHit++) {
-    // Retrieve i-th BTOW hit
     StPicoBTowHit *btowHit = (StPicoBTowHit*)mPicoDst->btowHit(iHit);
-    // Hit must exist
-    if (!btowHit) continue;
-    // Fill tower ADC
+    if (!btowHit) continue;// Hit must exist
     hBemcTowerAdc->Fill( btowHit->adc() );
   } // hit loop
-  //=============================================================
+
   mTree->Fill(); // Fill the TTree with the current myTreeEvent
- //=============================================================
+
   return kStOk;
 }
