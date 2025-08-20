@@ -57,7 +57,7 @@ root -l -b -q macros/readMyTreeEvent.C+
 
 
 
-## Remark: Running in your own laptop
+## Remark: Running on your own laptop
 In case you want to enter and run STAR container on your own laptop:
 
 - You need to install either [Docker engine](https://docs.docker.com/get-started/get-docker/) or [Apptainer (singularity)](https://apptainer.org/docs/admin/main/installation.html).
