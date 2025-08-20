@@ -1,5 +1,5 @@
-#ifndef TRACKCANDIDATE_H
-#define TRACKCANDIDATE_H
+#ifndef MYTRACK_H
+#define MYTRACK_H
 
 #include "TObject.h"
 
@@ -19,5 +19,5 @@ public:
 };
 
 
-#endif // TRACKCANDIDATE_H
+#endif // MYTRACK_H
 

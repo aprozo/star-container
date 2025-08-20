@@ -8,15 +8,10 @@
 #include <vector>
 #include <iostream>
 
-  //=============================================================
-  //FOR VERONIKA
+// My headers
 #include "MyTreeEvent.h"
 
-//
 // Forward declarations
-//
-
-// StPicoDstMaker
 class StPicoDstMaker;
 
 // StPicoEvent
@@ -36,7 +31,7 @@ class StPicoDstAnalysisMaker : public StMaker {
  public:
   /// Constructor
   StPicoDstAnalysisMaker(StPicoDstMaker *maker,
-                         const char* oFileName = "oStPicoDstAnalysisMaker.root" );
+                         TString oFileName = "oStPicoDstAnalysisMaker.root" );
   /// Destructor
   virtual ~StPicoDstAnalysisMaker();
   /// Init method inherited from StMaker
@@ -45,11 +40,8 @@ class StPicoDstAnalysisMaker : public StMaker {
   virtual Int_t Make();
   /// Finish method inherited from StMaker
   virtual Int_t Finish();
-
   /// Set debug status
   void setDebugStatus(bool status)                      { mDebug = status; }
-  /// Set output file name
-  void setOutputFileName(const char* name)              { mOutFileName = name; }
 
   /// Add trigger id to select
   void addTriggerId(const unsigned int& id);
@@ -57,7 +49,6 @@ class StPicoDstAnalysisMaker : public StMaker {
   void setVtxZ(const float& lo, const float& hi)        { mVtxZ[0]=lo; mVtxZ[1]=hi; }
   /// Set cut on the radial position of the primary vertex
   void setVtxR(const float& lo, const float& hi)        { mVtxR[0]=lo; mVtxR[1]=hi; }
-
   /// Set cut on nHits
   void setNHits(const int& lo, const int& hi)           { mNHits[0] = lo; mNHits[1] = hi; }
   /// Set cut on track pT
@@ -66,7 +57,6 @@ class StPicoDstAnalysisMaker : public StMaker {
   void setEta(const float& lo, const float& hi)         { mEta[0] = lo; mEta[1] = hi; }
 
  private:
-
   /// Create histograms
   void CreateHistograms();
 
@@ -97,7 +87,7 @@ class StPicoDstAnalysisMaker : public StMaker {
   Float_t mEta[2];
 
   /// Output file name
-  const char* mOutFileName;
+  TString mOutFileName;
   /// Output file
   TFile *mOutFile;
 
@@ -122,14 +112,6 @@ class StPicoDstAnalysisMaker : public StMaker {
 
   // BEMC hit information
   TH1D *hBemcTowerAdc;
-
-  /// Event counter
-  UInt_t mEventCounter;
-
-  // Constructor switcher in order to distinguish between StPicoDstMaker and StPicoDstReader
-  //(needed for the example only). In real life, one should use only one of them.
-  Bool_t mIsFromMaker;
-
 
   TTree *mTree; // Tree to store analysis results
   MyTreeEvent *myTreeEvent; // Object to hold event data

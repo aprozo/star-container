@@ -8,7 +8,6 @@
 #include "StPicoDstMaker/StPicoDstMaker.h"
 // StPicoEvent headers
 #include "StPicoEvent/StPicoDst.h"
-#include "StPicoEvent/StPicoDstReader.h"
 #include "StPicoEvent/StPicoEvent.h"
 #include "StPicoEvent/StPicoTrack.h"
 #include "StPicoEvent/StPicoBTowHit.h"
@@ -20,8 +19,6 @@
 #include "TH1F.h"
 #include "TH1D.h"
 #include "TH2F.h"
-
-
 #include "TTree.h"
 
 #include "MyTrack.h"
@@ -34,21 +31,14 @@ ClassImp(StPicoDstAnalysisMaker)
 
 //________________
 StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(StPicoDstMaker *maker,
-                                               const char* oFileName) :
-  StMaker(), mDebug(false), mOutFileName(nullptr), mOutFile(nullptr),
-  mPicoDstMaker(maker), mPicoDst(nullptr), hVtxXvsY(nullptr),
-  hVtxZ(nullptr), hPrimaryPt(nullptr), hGlobalNHits(nullptr),
-  hPrimaryNHits(nullptr), hGlobalEta(nullptr), hPrimaryEta(nullptr),
-  hPrimaryDedxVsPt(nullptr), hPrimaryInvBetaVsP(nullptr),
-  hBemcTowerAdc(nullptr), mEventCounter(0), mIsFromMaker(true) {
-  // Set output file name
-  mOutFileName = oFileName;
-
+                                               TString oFileName) :
+  StMaker(), mDebug(false), mOutFileName(oFileName), mOutFile(nullptr), //this is initiation list 
+  mPicoDstMaker(maker), mPicoDst(nullptr){            //at the time of creation
+ 
   // Clean trigger ID collection
   if( !mTriggerId.empty() ) {
     mTriggerId.clear();
   }
-
   // Set default event cut values
   mVtxZ[0] = -70.; mVtxZ[1] = 70.;
   mVtxR[0] = 0.; mVtxR[1] = 2.;
@@ -61,8 +51,6 @@ StPicoDstAnalysisMaker::StPicoDstAnalysisMaker(StPicoDstMaker *maker,
 
 //________________
 StPicoDstAnalysisMaker::~StPicoDstAnalysisMaker() {
-  // Destructor
-  /* empty */
 }
 
 //________________
@@ -86,7 +74,6 @@ Int_t StPicoDstAnalysisMaker::Init() {
     LOG_ERROR << "[ERROR] No StPicoDst has been provided. Terminating." << endm;
     return kStErr;
   }
-
   // Create output file
   if (!mOutFile) {
     mOutFile = new TFile(mOutFileName, "recreate");
@@ -96,15 +83,14 @@ Int_t StPicoDstAnalysisMaker::Init() {
              << " already exist!" << endm;
   }
 
-  // Create histograms
-  CreateHistograms();
-
   //---------------------------------------------------------------------------
   // Create TTree for analysis results
   mTree = new TTree("events", "Analysis Results");
   myTreeEvent = new MyTreeEvent();
   mTree->Branch("MyTreeEvent", &myTreeEvent);
   //---------------------------------------------------------------------------
+  // Create histograms
+  CreateHistograms();
 
   if (mDebug) {
     LOG_INFO << "StPicoDstAnalysisMaker has been initialized\n" << endm;
@@ -144,6 +130,9 @@ void StPicoDstAnalysisMaker::CreateHistograms() {
   if (mDebug) {
     LOG_INFO << "Creating histograms..." << endm;
   }
+
+  TDirectory *dir = gDirectory;
+  dir->mkdir("qa_histograms")->cd();
    //--------------------------------------------------------------------------  
   hVtxXvsY = new TH2F("hVtxXvsY","Primary vertex y vs. x;x (cm);y (cm)",
                       200, -10., 10., 200, -10., 10.);
@@ -176,21 +165,15 @@ void StPicoDstAnalysisMaker::CreateHistograms() {
 
 //________________
 Bool_t StPicoDstAnalysisMaker::IsGoodTrigger(StPicoEvent *event) {
-
-  Bool_t isGood = false;
-  if ( !mTriggerId.empty()) {
+  if (!mTriggerId.empty()) {
     for (unsigned int iIter=0; iIter<mTriggerId.size(); iIter++) {
       if ( event->isTrigger( mTriggerId.at(iIter) ) ) {
-        isGood = true;
-        break;
-      } // if ( event->isTrigger( mTriggerId.at(iIter) ) )
+        return true;
+      }
     } // for (unsigned int iIter=0; iIter<mTriggerId.size(); iIter++)
+    return false;
   } // if ( !mTriggerId.empty())
-  else {
-    isGood = true;
-  } // else
-
-  return isGood;
+  return true;
 }
 
 //________________
@@ -214,30 +197,12 @@ Bool_t StPicoDstAnalysisMaker::TrackCut(StPicoTrack *track) {
 
 //________________
 Int_t StPicoDstAnalysisMaker::Make() {
+  // Make is executed on every new event
 
-  // Increment event counter
-  mEventCounter++;
-
-  // Print event counter
-  if ( (mEventCounter % 1000) == 0) {
-    LOG_INFO << "Working on event: " << mEventCounter << "/"
-             << mPicoDstMaker->chain()->GetEntries() << endl;
-  }
-
-  // Check that PicoDst exists
-  if ( !mPicoDst ) {
-    LOG_ERROR << "[ERROR] No PicoDst has been found. Terminating" << endm;
-    return kStErr;
-  }
-  //
   // The example that shows how to access event information
   //
   // Retrieve pico event
   StPicoEvent *theEvent = mPicoDst->event();
-  if ( !theEvent ) {
-    LOG_ERROR << "[ERROR] PicoDst does not contain event information. Terminating" << endm;
-    return kStErr;
-  }
 
   // Check if event passes event cut (declared and defined in this
   // analysis maker)
@@ -250,7 +215,7 @@ Int_t StPicoDstAnalysisMaker::Make() {
                   theEvent->primaryVertex().Y() );
   hVtxZ->Fill( theEvent->primaryVertex().Z() );
 
-
+  // Create references to event-level data for easier access
   vector<MyTrack> *inclusiveTracks = &myTreeEvent->inclusiveTracks;
 
   MyTrack inclusiveTrack;
@@ -275,87 +240,71 @@ Int_t StPicoDstAnalysisMaker::Make() {
   // The example that shows how to access track information
   //
 
-  // Retrieve number of tracks in the event. Make sure that
-  // SetStatus("Track*",1) is set to 1. In case of 0 the number
-  // of stored tracks will be 0, even if those exist
+  // Get number of tracks in the event
   unsigned int nTracks = mPicoDst->numberOfTracks();
 
   // Track loop
-  for (unsigned int iTrk=0; iTrk<nTracks; iTrk++) {
+  for (unsigned int iTrack=0; iTrack<nTracks; iTrack++) {
 
     // Retrieve i-th pico track
-    StPicoTrack *theTrack = (StPicoTrack*)mPicoDst->track(iTrk);
+    StPicoTrack *track = (StPicoTrack*)mPicoDst->track(iTrack);
     // Track must exist
-    if (!theTrack) continue;
+    if (!track) continue;
 
     // Check if track passes track cut
-    if ( !TrackCut(theTrack) ) continue;
+    if ( !TrackCut(track) ) continue;
 
-
+    MyTrack myTrack; // create a temporary MyTrack object to store track information
     //=============================================================
-    inclusiveTrack.id = theTrack->id();
-    inclusiveTrack.pt = theTrack->gPt();
-    inclusiveTrack.eta = theTrack->gMom().Eta();
-    inclusiveTrack.phi = theTrack->gMom().Phi();
-    inclusiveTrack.charge = theTrack->charge();
-    inclusiveTracks->push_back(inclusiveTrack);
-   //=============================================================
-
+    myTrack.id = track->id();
+    myTrack.pt = track->gPt();
+    myTrack.eta = track->gMom().Eta();
+    myTrack.phi = track->gMom().Phi();
+    myTrack.charge = track->charge();
+    inclusiveTracks->push_back(myTrack); // push_back into current tree variable
+    //=============================================================
     // Fill global track parameters
-    hGlobalPt->Fill( theTrack->gPt() );
-    hGlobalNHits->Fill( theTrack->nHits() );
-    hGlobalEta->Fill( theTrack->gMom().Eta() );
+    hGlobalPt->Fill( track->gPt() );
+    hGlobalNHits->Fill( track->nHits() );
+    hGlobalEta->Fill( track->gMom().Eta() );
 
     // Primary track analysis
-    if ( !theTrack->isPrimary() ) continue;
-
+    if ( !track->isPrimary() ) continue;
     // Fill primary track histograms
-    hPrimaryPt->Fill( theTrack->pPt() );
-    hPrimaryNHits->Fill( theTrack->nHits() );
-    hPrimaryEta->Fill( theTrack->pMom().Eta() );
-    hPrimaryDedxVsPt->Fill( theTrack->charge() * theTrack->pPt(),
-                            theTrack->dEdx() );
-
+    hPrimaryPt->Fill( track->pPt() );
+    hPrimaryNHits->Fill( track->nHits() );
+    hPrimaryEta->Fill( track->pMom().Eta() );
+    hPrimaryDedxVsPt->Fill( track->charge() * track->pPt(),
+                            track->dEdx() );
     // Accessing TOF PID traits information.
     // One has to remember that TOF information is valid for primary tracks ONLY.
     // For global tracks the path length and time-of-flight have to be
     // recalculated by hands.
-    if ( theTrack->isTofTrack() ) {
+    if ( track->isTofTrack() ) {
       StPicoBTofPidTraits *trait =
-        (StPicoBTofPidTraits*)mPicoDst->btofPidTraits( theTrack->bTofPidTraitsIndex() );
+        (StPicoBTofPidTraits*)mPicoDst->btofPidTraits( track->bTofPidTraitsIndex() );
       if (!trait) continue;
 
       // Fill primary track TOF information
-      hPrimaryInvBetaVsP->Fill( theTrack->charge() * theTrack->pPt(),
+      hPrimaryInvBetaVsP->Fill( track->charge() * track->pPt(),
                                 1./trait->btofBeta() );
-    } // if ( theTrack->isTofTrack() )
+    } // if ( track->isTofTrack() )
   } // track loop
 
-  //
   // The example that shows how to access hit information
   //
-
-  // Get number of BTOW hits (make sure that SetStatus("BTowHit*",1) is set to 1)
-  // If it is set to 0, then mPicoDst will return 0 hits all the time
-  UInt_t nBTowHits = mPicoDst->numberOfBTowHits();
-
-  // Dummy check, but always good to know that the amount is okay
-  if (nBTowHits > 0) {
-    // Loop over BTOW hits
-    for (UInt_t iHit=0; iHit<nBTowHits; iHit++) {
-      // Retrieve i-th BTOW hit
-      StPicoBTowHit *btowHit = (StPicoBTowHit*)mPicoDst->btowHit(iHit);
-      // Hit must exist
-      if (!btowHit) continue;
-      // Fill tower ADC
-      hBemcTowerAdc->Fill( btowHit->adc() );
-    } // hit loop
-  } // if (nBTowHits > 0)
-
-
+  // Note: If the number of BTOW hits is 0, it might be because the
+  //       BTowHit branch is not enabled or there are genuinely no hits.
+  for (UInt_t iHit=0; iHit<mPicoDst->numberOfBTowHits(); iHit++) {
+    // Retrieve i-th BTOW hit
+    StPicoBTowHit *btowHit = (StPicoBTowHit*)mPicoDst->btowHit(iHit);
+    // Hit must exist
+    if (!btowHit) continue;
+    // Fill tower ADC
+    hBemcTowerAdc->Fill( btowHit->adc() );
+  } // hit loop
   //=============================================================
   mTree->Fill(); // Fill the TTree with the current myTreeEvent
  //=============================================================
-
   return kStOk;
 }
