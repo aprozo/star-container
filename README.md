@@ -1,5 +1,5 @@
 # STAR StRoot Tutorial [![Github Codespace](https://img.shields.io/badge/open-GH_Codespaces-blue?logo=github)](https://codespaces.new/aprozo/star-tutorial?quickstart=1)
-
+For successfull running on Github Codespaces one can submit an application for Free [Github Education](https://github.com/education) benefits.
 
 This is an example analysis of [`StPicoDst`](https://www.star.bnl.gov/webdata/dox/html/classStPicoDstMaker.html):
 - `St` stands for STAR, [all classes](https://www.star.bnl.gov/webdata/dox/html/annotated.html) start from it 
@@ -18,6 +18,11 @@ The `cons` command will:
 - create a directory `.sl7X_gccXX` where all compiled libraries will go which are used in your project
 - perform compilation of all your files with `.cxx`(important!) and connected headers `.h` under `StRoot` directory.
 
+## What this tutorial about?
+- It will show how `StRoot` folder is used to compile your project.
+- The analysis macro will create a file with user `TTree` and `QA Histograms`
+- The user defined `TTree` actually consists of classes [MyTreeEvent.h](/StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h) and [MyTrack.h](/StRoot/StPicoDstAnalysisMaker/MyTrack.h)
+- There is a second standalone macro which does not need any STAR infrastructure - only meantioned header files [MyTreeEvent.h](/StRoot/StPicoDstAnalysisMaker/MyTreeEvent.h) and [MyTrack.h](/StRoot/StPicoDstAnalysisMaker/MyTrack.h) and can be further used for analysis on personal latptop or batchfarm.
  
 ## Run instructions:
 1. First, you'll need to enter the STAR container, for that, type:
