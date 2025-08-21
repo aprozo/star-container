@@ -76,7 +76,7 @@ cd star-tutorial
 apptainer run docker://ghcr.io/star-bnl/star-sw:main-root5-gcc485 bash -l
 ```
 ### Important! 
-Do not forget to comment sourcing your local Root installation (`source /path/thisroot.sh`), otherwise there will be a conflict of 2 ROOT versions: one - from your local installation, another - from STAR container.
+Do not forget to comment in your `~/.bashrc` sourcing your local Root installation (`source /path/thisroot.sh`), otherwise there will be a conflict of 2 ROOT versions: one - from your local installation, another - from STAR container.
 
 You may also create a shortcut for `star-shell` using code below:
 ```bash
