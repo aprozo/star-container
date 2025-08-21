@@ -25,12 +25,6 @@ void runPicoDstAnalysisMaker(const char *inFileName = "/workspaces/star-tutorial
   // Read via StPicoDstMaker
   // I/O mode: write=1, read=2; input file (or list of files); name
   StPicoDstMaker *picoMaker = new StPicoDstMaker(2, inFileName, "picoDst");
-  // Set specific branches ON/OFF - it can slightly increase the speed of execution
-  // picoMaker->SetStatus("*", 0);
-  // picoMaker->SetStatus("Event*", 1);
-  // picoMaker->SetStatus("Track*", 1);
-  // picoMaker->SetStatus("BTofPidTraits*", 1);
-  // picoMaker->SetStatus("BTowHit*", 1);
   std::cout << "... done" << std::endl;
 
   std::cout << "Constructing StPicoDstAnalysisMaker with StPicoDstMaker" << std::endl;  
