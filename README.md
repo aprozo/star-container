@@ -75,3 +75,17 @@ git clone https://github.com/aprozo/star-tutorial.git
 cd star-tutorial
 apptainer run docker://ghcr.io/star-bnl/star-sw:main-root5-gcc485 bash -l
 ```
+### Important! 
+Do not forget to comment sourcing your local Root installation (`source /path/thisroot.sh`), otherwise there will be a conflict of 2 ROOT versions - one from your local, one from STAR container.
+
+You may also create a shortcut for `star-shell` using code below:
+```bash
+mkdir -p ~/.local/bin && cat >~/.local/bin/star-shell <<'EOF'
+#!/usr/bin/env bash
+apptainer run  docker://ghcr.io/star-bnl/star-sw:main-root5-gcc485 "$@"
+EOF
+chmod +x ~/.local/bin/star-shell
+grep -qxF 'export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc || echo 'export PATH="$HOME/.local/bin:$PATH"' >>~/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+```
+
